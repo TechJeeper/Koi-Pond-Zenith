@@ -1,0 +1,138 @@
+{
+  "name": "koi-pond-zenith",
+  "author": "caffeinegamer",
+  "version": "1.0.0",
+  "keywords": [
+    "pebble-app",
+    "watchface",
+    "koi",
+    "analog",
+    "zen"
+  ],
+  "private": true,
+  "dependencies": {
+    "@rebble/clay": "^1.1.0"
+  },
+  "pebble": {
+    "displayName": "Koi Pond Zenith",
+    "uuid": "c4e81f2a-9d7b-4a6e-b3c1-8f05e2a91d47",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery",
+      "basalt",
+      "diorite",
+      "flint"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "capabilities": [
+      "configurable"
+    ],
+    "messageKeys": [
+      "TimeFormat",
+      "LeadingZero",
+      "ShowDigital",
+      "ShowDate",
+      "ShowSeconds",
+      "SwimClockwise",
+      "RingInset"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "IMAGE_MENU_ICON",
+          "file": "images/menu_icon.png",
+          "menuIcon": true
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_POND",
+          "file": "images/pond/pond.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_S",
+          "file": "images/koi/white_s.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_SE",
+          "file": "images/koi/white_se.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_E",
+          "file": "images/koi/white_e.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_NE",
+          "file": "images/koi/white_ne.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_N",
+          "file": "images/koi/white_n.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_NW",
+          "file": "images/koi/white_nw.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_W",
+          "file": "images/koi/white_w.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_WHITE_SW",
+          "file": "images/koi/white_sw.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_S",
+          "file": "images/koi/orange_s.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_SE",
+          "file": "images/koi/orange_se.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_E",
+          "file": "images/koi/orange_e.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_NE",
+          "file": "images/koi/orange_ne.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_N",
+          "file": "images/koi/orange_n.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_NW",
+          "file": "images/koi/orange_nw.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_W",
+          "file": "images/koi/orange_w.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_KOI_ORANGE_SW",
+          "file": "images/koi/orange_sw.png"
+        }
+      ]
+    }
+  }
+}
