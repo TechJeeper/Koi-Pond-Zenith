@@ -179,27 +179,20 @@ def render(w: int, h: int, color: bool, scene: dict) -> Image.Image:
     pond = Image.open(POND).convert("RGBA")
     if not color:
         pond = to_bw(pond).convert("RGBA")
-        # Flatten grey pond onto black for B&W screens.
         flat = Image.new("RGBA", pond.size, (0, 0, 0, 255))
         flat.paste(pond, (0, 0), pond)
         pond = flat
 
-    scale = min(w / 144.0, h / 168.0)
-    if abs(scale - 1.0) > 0.01:
-        pw = max(1, int(round(144 * scale)))
-        ph = max(1, int(round(168 * scale)))
-        pond = pond.resize((pw, ph), Image.NEAREST)
-    else:
-        pw, ph = pond.size
-
-    ox = (w - pw) // 2
-    oy = (h - ph) // 2
-    img.paste(pond.convert("RGB"), (ox, oy))
+    # Match watchface: stretch pond to fill the whole display.
+    pond = pond.resize((w, h), Image.NEAREST)
+    img.paste(pond.convert("RGB"), (0, 0))
 
     cx, cy = w // 2, h // 2
-    max_r = min(w, h) // 2
-    radius = max(20, max_r - int(scene["ring_inset"] * scale))
-    koi_scale = scale
+    half = min(w, h) // 2
+    water_r = (half * 58) // 72
+    radius = water_r - (int(scene["ring_inset"]) - 18)
+    radius = max(20, min(radius, water_r))
+    koi_scale = min(w / 144.0, h / 168.0)
 
     hour_angle = ((scene["hour"] % 12) * 30) + (scene["minute"] // 2)
     minute_angle = scene["minute"] * 6
@@ -208,7 +201,7 @@ def render(w: int, h: int, color: bool, scene: dict) -> Image.Image:
     draw = ImageDraw.Draw(img)
     if scene["show_seconds"]:
         sx, sy = clock_point(cx, cy, radius, second_angle)
-        r = max(2, int(round(3 * scale)))
+        r = max(2, int(round(3 * koi_scale)))
         fill = ISLAMIC_GREEN if color else WHITE
         draw.ellipse((sx - r, sy - r, sx + r, sy + r), fill=fill, outline=BLACK)
 

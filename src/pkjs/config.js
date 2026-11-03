@@ -70,7 +70,7 @@ module.exports = [
       {
         type: 'slider',
         messageKey: 'RingInset',
-        label: 'Swim ring inset (px from edge)',
+        label: 'Swim tighter (inside water)',
         defaultValue: 18,
         min: 8,
         max: 40,

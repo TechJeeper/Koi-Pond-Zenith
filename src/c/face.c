@@ -61,28 +61,30 @@ static void format_date(char *buf, size_t n) {
   snprintf(buf, n, "%s %d %s", DOW[s_wday % 7], s_mday, MON[s_mon % 12]);
 }
 
+// Pond art is authored at 144x168; water rim sits ~58px from center (half=72).
+#define POND_ART_HALF 72
+#define POND_WATER_R 58
+
 static void update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
   const FaceSettings *cfg = settings_get();
 
-  // Fill with deep pond teal in case the bitmap doesn't cover emery.
   graphics_context_set_fill_color(ctx, GColorDarkGreen);
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
+  // Stretch pond to fill the whole display so koi never swim in the margin.
   if (s_pond) {
-    GSize psz = gbitmap_get_bounds(s_pond).size;
-    GRect dest = GRect(
-        (bounds.size.w - psz.w) / 2,
-        (bounds.size.h - psz.h) / 2,
-        psz.w, psz.h);
     graphics_context_set_compositing_mode(ctx, GCompOpAssign);
-    graphics_draw_bitmap_in_rect(ctx, s_pond, dest);
+    graphics_draw_bitmap_in_rect(ctx, s_pond, bounds);
   }
 
   GPoint center = GPoint(bounds.size.w / 2, bounds.size.h / 2);
-  int max_r = (bounds.size.w < bounds.size.h ? bounds.size.w : bounds.size.h) / 2;
-  int radius = max_r - cfg->ring_inset;
+  int half = (bounds.size.w < bounds.size.h ? bounds.size.w : bounds.size.h) / 2;
+  // Scale the water rim to this screen, then apply Clay inset from that rim.
+  int water_r = (half * POND_WATER_R) / POND_ART_HALF;
+  int radius = water_r - (cfg->ring_inset - 18);
   if (radius < 20) radius = 20;
+  if (radius > water_r) radius = water_r;
 
   // Clock angles: 0° at 12, clockwise.
   int hour_angle = ((s_hour % 12) * 30) + (s_minute / 2);

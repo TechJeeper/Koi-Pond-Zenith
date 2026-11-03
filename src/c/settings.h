@@ -16,7 +16,7 @@ typedef struct {
   bool show_date;
   bool show_seconds;
   bool swim_clockwise;
-  int ring_inset;  // pixels from screen edge to swim radius
+  int ring_inset;  // higher = swim tighter inside the water (default 18)
 } FaceSettings;
 
 typedef void (*SettingsChangedFn)(void);
