@@ -61,9 +61,10 @@ static void format_date(char *buf, size_t n) {
   snprintf(buf, n, "%s %d %s", DOW[s_wday % 7], s_mday, MON[s_mon % 12]);
 }
 
-// Pond art is authored at 144x168; water rim sits ~58px from center (half=72).
+// Pond art water circle ~58px from center (half≈72). Koi sprites are 32px, so
+// the swim *center* must sit ~16px inside the water rim or fish land on stones.
 #define POND_ART_HALF 72
-#define POND_WATER_R 58
+#define POND_SWIM_R 42
 
 static void update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
@@ -72,19 +73,29 @@ static void update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, GColorDarkGreen);
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
-  // Stretch pond to fill the whole display so koi never swim in the margin.
+  // Pebble does not stretch bitmaps — draw 1:1, centered. Emery ships a
+  // full-size pond resource so this fills Time 2 as well.
+  GRect pond_rect = bounds;
   if (s_pond) {
+    GSize psz = gbitmap_get_bounds(s_pond).size;
+    pond_rect = GRect(
+        (bounds.size.w - psz.w) / 2,
+        (bounds.size.h - psz.h) / 2,
+        psz.w, psz.h);
     graphics_context_set_compositing_mode(ctx, GCompOpAssign);
-    graphics_draw_bitmap_in_rect(ctx, s_pond, bounds);
+    graphics_draw_bitmap_in_rect(ctx, s_pond, pond_rect);
   }
 
-  GPoint center = GPoint(bounds.size.w / 2, bounds.size.h / 2);
-  int half = (bounds.size.w < bounds.size.h ? bounds.size.w : bounds.size.h) / 2;
-  // Scale the water rim to this screen, then apply Clay inset from that rim.
-  int water_r = (half * POND_WATER_R) / POND_ART_HALF;
-  int radius = water_r - (cfg->ring_inset - 18);
-  if (radius < 20) radius = 20;
-  if (radius > water_r) radius = water_r;
+  GPoint center = GPoint(
+      pond_rect.origin.x + pond_rect.size.w / 2,
+      pond_rect.origin.y + pond_rect.size.h / 2);
+  int half = (pond_rect.size.w < pond_rect.size.h
+                  ? pond_rect.size.w
+                  : pond_rect.size.h) / 2;
+  int swim_r = (half * POND_SWIM_R) / POND_ART_HALF;
+  int radius = swim_r - (cfg->ring_inset - 18);
+  if (radius < 16) radius = 16;
+  if (radius > swim_r) radius = swim_r;
 
   // Clock angles: 0° at 12, clockwise.
   int hour_angle = ((s_hour % 12) * 30) + (s_minute / 2);

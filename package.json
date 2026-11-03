@@ -50,7 +50,14 @@
         {
           "type": "bitmap",
           "name": "IMAGE_POND",
-          "file": "images/pond/pond.png"
+          "file": "images/pond/pond.png",
+          "targetPlatforms": ["basalt", "diorite", "flint"]
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_POND",
+          "file": "images/pond/pond_emery.png",
+          "targetPlatforms": ["emery"]
         },
         {
           "type": "bitmap",

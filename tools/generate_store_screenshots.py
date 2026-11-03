@@ -176,23 +176,27 @@ def render(w: int, h: int, color: bool, scene: dict) -> Image.Image:
     bg = DARK_GREEN if color else BLACK
     img = Image.new("RGB", (w, h), bg)
 
-    pond = Image.open(POND).convert("RGBA")
+    # Match watchface: 1:1 centered pond (emery uses a dedicated 200x228 asset).
+    pond_path = ROOT / "resources" / "images" / "pond" / (
+        "pond_emery.png" if (w, h) == (200, 228) else "pond.png"
+    )
+    pond = Image.open(pond_path).convert("RGBA")
     if not color:
         pond = to_bw(pond).convert("RGBA")
         flat = Image.new("RGBA", pond.size, (0, 0, 0, 255))
         flat.paste(pond, (0, 0), pond)
         pond = flat
 
-    # Match watchface: stretch pond to fill the whole display.
-    pond = pond.resize((w, h), Image.NEAREST)
-    img.paste(pond.convert("RGB"), (0, 0))
+    pw, ph = pond.size
+    ox, oy = (w - pw) // 2, (h - ph) // 2
+    img.paste(pond.convert("RGB"), (ox, oy))
 
-    cx, cy = w // 2, h // 2
-    half = min(w, h) // 2
-    water_r = (half * 58) // 72
-    radius = water_r - (int(scene["ring_inset"]) - 18)
-    radius = max(20, min(radius, water_r))
-    koi_scale = min(w / 144.0, h / 168.0)
+    cx, cy = ox + pw // 2, oy + ph // 2
+    half = min(pw, ph) // 2
+    swim_r = (half * 42) // 72
+    radius = swim_r - (int(scene["ring_inset"]) - 18)
+    radius = max(16, min(radius, swim_r))
+    koi_scale = min(pw / 144.0, ph / 168.0)
 
     hour_angle = ((scene["hour"] % 12) * 30) + (scene["minute"] // 2)
     minute_angle = scene["minute"] * 6
